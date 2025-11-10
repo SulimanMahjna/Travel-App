@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
-from src.auth.service import TodoServices
+from auth.service import TodoServices
 from flask_bcrypt import Bcrypt
+from flask import flash
+
+
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
