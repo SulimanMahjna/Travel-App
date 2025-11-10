@@ -1,5 +1,5 @@
 CREATE TABLE user (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name Text,
     email Text UNIQUE,
     password Text,
@@ -9,20 +9,15 @@ CREATE TABLE user (
 );
 
 CREATE TABLE places (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name Text UNIQUE NOT NULL,
     description Text UNIQUE NOT NULL,
     location Text UNIQUE NOT NULL,
-
-    user_id Int,
-    CONSTRAINT fk_user
-        FOREIGN KEY (user_id) 
-        REFERENCES user (id)
-        ON DELETE CASCADE
+    featuers Text UNIQUE NOT NULL,
 );
 
 CREATE TABLE favorites (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
     user_id Int,
     CONSTRAINT fk_user
