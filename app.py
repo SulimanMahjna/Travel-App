@@ -1,41 +1,54 @@
-from flask import Flask, render_template, request, redirect, url_for
-from auth.service import TodoServices
-from flask_bcrypt import Bcrypt
-from flask import flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from werkzeug.security import check_password_hash
+from src.database.execute import DatabaseHandler
+from src.users.queries import select_user_by_email
 
+app =Flasl(__name__)
 
-
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
-
-@app.route('/login', methods=['GET', 'POST'])
+@router.get('/')
 def login():
-    
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+    return render_templates("login.html")
 
-        if user and bcrypt.check_password_hash(user.password_hash, form.password.data):
-            login_user(user)
-            flash('Logged in successfully.')
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('index'))
-        else:
-            flash('Invalid username or password', 'danger')
+@router.post('/login-process')
+def login_process():
+    username = request.form.get('username')
+    password = request.form.get('password')
 
-    return render_template('login.html', form=form)
-
-@app.route("/register", methods=['GET', 'POST'])
+    if authenticate(username, password):   
+        return redirect(url_for('home.html'))   
+           else:
+        return render_template("register.html")
+@router.get('/register')
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password_hash=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Registration successful! Please log in.', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template("register.html")
+@router.post('/register-process')
+def register_process():
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+    if password != confirm_password:
+        flash("Passwords do not match!", "error")
+        return redirect(url_for('router.register'))
+        existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        flash("Username already exists!", "error")
+        return redirect(url_for('router.register'))
+    if authenticate(username,email, password):   
+        return redirect(url_for('login .html'))   
+           else:
+        return render_template("register.html")
+@app.route('/home', methods=['GET'])
+def home():
+    return render_templates("home.html")
+    @app.route('/search', methods=['GET'])
+def search_places():
+    query = request.args.get('query')          
+    features = request.args.get('features')    
+
+    
+    return render_template("home.html", username=session['username'])  
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

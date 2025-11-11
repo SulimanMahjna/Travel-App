@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Recommended Places</title>
+    <link rel="stylesheet" href="../static/styles/home.css">
+</head>
+<body class="home-body">
+
+    <div class="home-container">
+        <div class="home-card">
+            <h1>Welcome, John Doe!</h1>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <h2>Your Profile</h2>
+                <p><strong>Username:</strong> John Doe</p>
+                <p><strong>Email:</strong> john@example.com</p>
+                <a href="/profile" class="btn">View Profile</a>
+            </div>
+
+            <hr>
+
+            
+            <div class="favorites-add">
+                <h2>Add Place to Favorites</h2>
+                <form action="/fav" method="POST">
+                    <label for="place_id">Place ID:</label>
+                    <input type="text" id="place_id" name="place_id" placeholder="Enter Place ID" required>
+                    <button type="submit" class="btn">Add to Favorites</button>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- Remove from Favorites -->
+            <div class="favorites-remove">
+                <h2>Remove Place from Favorites</h2>
+                <form action="/fav/remove" method="POST">
+                    <label for="place_id_remove">Place ID:</label>
+                    <input type="text" id="place_id_remove" name="place_id" placeholder="Enter Place ID" required>
+                    <button type="submit" class="btn btn-small">Remove</button>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- User Favorites List -->
+            <div class="favorites-list">
+                <h2>Your Favorite Places</h2>
+                <ul>
+                    <li>Place 1 <form action="/fav/remove" method="POST" style="display:inline;"><button type="submit" class="btn btn-small">Remove</button></form></li>
+                    <li>Place 2 <form action="/fav/remove" method="POST" style="display:inline;"><button type="submit" class="btn btn-small">Remove</button></form></li>
+                    <li>Place 3 <form action="/fav/remove" method="POST" style="display:inline;"><button type="submit" class="btn btn-small">Remove</button></form></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
