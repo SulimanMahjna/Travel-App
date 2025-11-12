@@ -14,9 +14,9 @@ def login():
 @app.route('/login-process', methods=['POST'])
 def login_process():
     if request.method == 'POST':
-    username = request.form.get('username')
-    password = request.form.get('password')
-    row = service.login(username, password)
+        username = request.form.get('username')
+        password = request.form.get('password')
+        row = service.login(username, password)
     if not row:
         return redirect(url_for("login"))
     return redirect(url_for("home"))
@@ -32,11 +32,11 @@ def register():
 @app.route('/register-process', methods=['POST'])
 def register_process():
     if request.method == 'POST':
-    username = request.form.get('username')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    # confirm_password = request.form.get('confirm_password')
-    row = user_services.register(username, email, password)
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        # confirm_password = request.form.get('confirm_password')
+        row = user_services.register(username, email, password)
     if not row:
         return redirect(url_for("register"))
     return redirect(url_for("login"))
