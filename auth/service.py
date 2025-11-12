@@ -1,25 +1,18 @@
-from database_setup import users_table, todos_table, sub_todos_table
+from database import users
 from datetime import datetime
-from src.auth.query import TodoQueries
 
-class TodoServices:
+class UserServices:
     def __init__(self):
-        self.todo_query = TodoQueries()
+        self.user_queries = UserQueries()
 
-    def get_all_user(self):
-        rows = self.todo_query.get_all_user()
-        if not rows:
-            raise Exception("No users found")
-        return rows
-
-    def insert_user(self, user_data):
-        row = self.todo_query.insert_user(user_data)
-        if not row:
-            raise Exception("Failed to insert user")
-        return row
-
-    def update_user(self, user_data):
-        row = self.todo_query.update_user(user_data)
-        if not row:
-            raise Exception("Failed to update user")
-        return row
+    def login(self, username , passowrd):
+        user, error =self.user_queries.login(username, passowrd)
+        if not user:
+            return error
+        return user
+    
+    def register(self, username, email , passowrd):
+        user, error =self.user_queries.login(username, email, passowrd)
+        if not user:
+            return error
+        return user

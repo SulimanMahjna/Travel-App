@@ -1,13 +1,20 @@
 from src.database.connection import engine
 
-class DatabaseHandler:
-    def execute_one(self, statement):
-        with engine.begin() as connection:
-            result = connection.execute(statement).fetchone()
-            return result
+class DBClinet:
+    def __init__(self):
+        self.engine = engine
 
-    def execute_all(self, statement):
-        with engine.begin() as connection:
-            result = connection.execute(statement).fetchall()
-            return result
+    def execute_one(self, query):
+        with self.engine.begin() as connection:
+            rows = connection.execute(query)
+            if rows:
+                return rows.mappings.all()
+        return None
+
+    def execute_all(self, query):
+        with self.engine.begin() as connection:
+            rows = connection.execute(query)
+            if rows:
+                return rows.mappings.all()
+        return None
 

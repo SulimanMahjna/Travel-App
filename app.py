@@ -13,13 +13,13 @@ def login():
 # @router.post('/login-process')
 @app.route('/login-process', methods=['POST'])
 def login_process():
+    if request.method == 'POST':
     username = request.form.get('username')
     password = request.form.get('password')
-
-    if authenticate(username, password):   
-        return redirect(url_for('home.html'))   
-        #    else:
-        return render_template("register.html")
+    row = service.login(username, password)
+    if not row:
+        return redirect(url_for("login"))
+    return redirect(url_for("home"))
     
 
 # @router.get('/register')
@@ -31,21 +31,16 @@ def register():
 # @router.post('/register-process')
 @app.route('/register-process', methods=['POST'])
 def register_process():
+    if request.method == 'POST':
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
-    confirm_password = request.form.get('confirm_password')
-    if password != confirm_password:
-        flash("Passwords do not match!", "error")
-        return redirect(url_for('router.register'))
-        existing_user = User.query.filter_by(username=username).first()
-    if existing_user:
-        flash("Username already exists!", "error")
-        return redirect(url_for('router.register'))
-    if authenticate(username,email, password):   
-        return redirect(url_for('login .html'))   
-        #    else:
-        return render_template("register.html")
+    # confirm_password = request.form.get('confirm_password')
+    row = user_services.register(username, email, password)
+    if not row:
+        return redirect(url_for("register"))
+    return redirect(url_for("login"))
+    
     
 
 @app.route('/home', methods=['GET'])
