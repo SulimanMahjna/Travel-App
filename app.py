@@ -3,25 +3,33 @@ from werkzeug.security import check_password_hash
 from src.database.execute import DatabaseHandler
 from src.users.queries import select_user_by_email
 
-app =Flasl(__name__)
+app =Flask(__name__)
 
-@router.get('/')
+# @router.get('/')
+@app.route('/', methods=['GET'])
 def login():
-    return render_templates("login.html")
+    return render_template("login.html")
 
-@router.post('/login-process')
+# @router.post('/login-process')
+@app.route('/login-process', methods=['POST'])
 def login_process():
     username = request.form.get('username')
     password = request.form.get('password')
 
     if authenticate(username, password):   
         return redirect(url_for('home.html'))   
-           else:
+        #    else:
         return render_template("register.html")
-@router.get('/register')
+    
+
+# @router.get('/register')
+@app.route('/register', methods=['GET'])
 def register():
     return render_template("register.html")
-@router.post('/register-process')
+
+
+# @router.post('/register-process')
+@app.route('/register-process', methods=['POST'])
 def register_process():
     username = request.form.get('username')
     email = request.form.get('email')
@@ -36,12 +44,16 @@ def register_process():
         return redirect(url_for('router.register'))
     if authenticate(username,email, password):   
         return redirect(url_for('login .html'))   
-           else:
+        #    else:
         return render_template("register.html")
+    
+
 @app.route('/home', methods=['GET'])
 def home():
-    return render_templates("home.html")
-    @app.route('/search', methods=['GET'])
+    return render_template("home.html")
+
+
+@app.route('/search', methods=['GET'])
 def search_places():
     query = request.args.get('query')          
     features = request.args.get('features')    
