@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import check_password_hash
-from src.database.execute import DatabaseHandler
-from src.users.queries import select_user_by_email
+from src.users.services import UserServices
+
 
 app =Flask(__name__)
 
@@ -16,14 +16,14 @@ def login_process():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        row = service.login(username, password)
+        row = UserServices.login(username, password)
     if not row:
         return redirect(url_for("login"))
     return redirect(url_for("home"))
     
 
 # @router.get('/register')
-@app.route('/register', methods=['GET'])
+@app.route('/register')
 def register():
     return render_template("register.html")
 
@@ -36,7 +36,7 @@ def register_process():
         email = request.form.get('email')
         password = request.form.get('password')
         # confirm_password = request.form.get('confirm_password')
-        row = user_services.register(username, email, password)
+        row = UserServices.register(username, email, password)
     if not row:
         return redirect(url_for("register"))
     return redirect(url_for("login"))
@@ -58,4 +58,4 @@ def search_places():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

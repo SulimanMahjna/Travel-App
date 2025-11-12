@@ -1,20 +1,19 @@
-from src.database.execute import DatabaseHandler
-from src.users.queries import insert_user, select_user_by_email
-from werkzeug.security import generate_password_hash, check_password_hash
 
-db = DatabaseHandler()
+from src.users.queries import UserQueries
 
-def register_user(data):
-    data["password"] = generate_password_hash(data["password"])
-    statement = insert_user(data)
-    db.execute_commit(statement)
-    return "User registered successfully"
 
-def login_user(email, password):
-    statement = select_user_by_email(email)
-    user = db.execute_one(statement)
-    if not user:
-        return None
-    if check_password_hash(user.password, password):
+class UserServices:
+    def __init__(self):
+        self.user_queries = UserQueries()
+
+    def login(self, username , passowrd):
+        user, error =self.user_queries.login(username, passowrd)
+        if not user:
+            return error
         return user
-    return None
+    
+    def register(self, username, email , passowrd):
+        user, error =self.user_queries.login(username, email, passowrd)
+        if not user:
+            return error
+        return user
